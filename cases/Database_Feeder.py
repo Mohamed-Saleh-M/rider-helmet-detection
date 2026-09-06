@@ -11,7 +11,8 @@ print("\t\tDATABASE FEEDER\n")
 
 print('DATA FEEDING STARTED AT',(datetime.now()).strftime("%H:%M:%S"),"\n\n")
 
-path = "C:/Users/FRIENDS.DESKTOP-1RIRFCP/Desktop/Helmet and Number Plate Detection and Recognition/Helmet Detector/Cases"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+path = os.environ.get("HELMET_CASES_DIR", os.path.join(BASE_DIR, "Cases"))
 
 list_loc = [f.name for f in os.scandir(path) if f.is_dir()]
 for i in list_loc:

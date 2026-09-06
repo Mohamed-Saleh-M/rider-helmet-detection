@@ -13,7 +13,8 @@ accn_number = input("Enter Accusation Number : ") #ACN15012322413578
 
 print("\nCase folder {} created\n\nDetails :-\n-------------\n".format(accn_number))
 
-parent_dir = "C:/Users/FRIENDS.DESKTOP-1RIRFCP/Desktop/Helmet and Number Plate Detection and Recognition/Helmet Detector/Cases"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+parent_dir = os.environ.get("HELMET_CASES_DIR", os.path.join(BASE_DIR, "Cases"))
 new_dir = accn_number
 
 data_r = surv_data.find_one({"accusation number": accn_number})

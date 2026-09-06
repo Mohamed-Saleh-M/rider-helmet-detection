@@ -4,20 +4,29 @@ import os
 import imutils
 from tensorflow.keras.models import load_model
 import random
+import sys
 from datetime import datetime
 
 
 os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 net = cv2.dnn.readNet("yolov3-custom_7000.weights", "yolov3-custom.cfg")
 net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
 net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
 model = load_model('helmet-nonhelmet_cnn.h5')
 #Locations : 143101 - Babowal Main 143108 - Attari State Highway 143108 - Bachiwind Ringroad 143119 - Bagga Toll Gate 143502 - Abdal State Highway
-location = '143502 - Abdal State Highway'
-save_dir = "C:/Users/FRIENDS.DESKTOP-1RIRFCP/Desktop/Helmet and Number Plate Detection and Recognition/Helmet Detector/Cases"
+location = sys.argv[1] if len(sys.argv) > 1 else os.environ.get("HELMET_LOCATION", '143502 - Abdal State Highway')
+save_dir = os.environ.get("HELMET_CASES_DIR", os.path.join(BASE_DIR, "Cases"))
+def resolve_video(location):
+    candidates = [os.path.join(BASE_DIR, "videos", location + ".mp4"),
+                  os.path.join(BASE_DIR, location + ".mp4")]
+    for candidate in candidates:
+        if os.path.exists(candidate):
+            return candidate
+    sys.exit("Video not found. Expected one of:\n  - " + "\n  - ".join(candidates))
 print("\t\tRIDERS HELMET SURVEILLANCE\n\nLOCATION : {}\nDATE : {}\n\nCASES LOG\n--------------".format(location,datetime.now().strftime("%d/%m/%y")))
 print('SURVEILLANCE STREAMING STARTED AT',(datetime.now()).strftime("%H:%M:%S"))
-cap = cv2.VideoCapture(r'{}.mp4'.format(location))
+cap = cv2.VideoCapture(resolve_video(location))
 COLORS = [(0,255,0),(0,0,255)]
 layer_names = net.getLayerNames()
 output_layers = [layer_names[i - 1] for i in net.getUnconnectedOutLayers()]

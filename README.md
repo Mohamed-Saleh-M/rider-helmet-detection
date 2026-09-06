@@ -58,10 +58,8 @@ Place both next to `Helmet_detect.py` (or update the load paths in the script).
 ## Running
 
 1. Start a MongoDB instance (needed only for the database scripts).
-2. Edit the hard-coded machine-specific paths in `Helmet_detect.py`,
-   `cases/Database_Feeder.py`, and `cases/Database_Retriever.py` to match your setup:
-   - `save_dir` / `parent_dir` (case cache location)
-   - `location` and the `.mp4` video path for the surveillance stream
+2. Place the survey video as `videos/<location>.mp4` (or `<location>.mp4` next to `Helmet_detect.py`). The location defaults to `143502 - Abdal State Highway` and can be passed as a CLI argument (`python Helmet_detect.py "143101 - Babowal Main"`) or via the `HELMET_LOCATION` env var.
+3. Case folders are written to `Cases/` next to `Helmet_detect.py`. All paths are derived from the project layout and are overridable with the `HELMET_CASES_DIR` env var, so no machine-specific paths need editing.
 3. Run the detection:
 
 ```bash
@@ -86,7 +84,7 @@ python Database_Retriever.py
 ## Notes and known limitations
 
 - The detection loop uses the **CUDA** backend (`cv2.dnn.DNN_BACKEND_CUDA` / `DNN_TARGET_CUDA`) and expects a GPU; on CPU-only machines change the backend/target.
-- All three scripts contain machine-specific absolute paths (`C:/Users/...`) and the survey videos are loaded from hard-coded locations — update them before running.
+- Paths are now portable: `save_dir`/`parent_dir`/case cache resolve to `Cases/` relative to the project root and the survey video is read from `videos/<location>.mp4` (or `<location>.mp4`). Override with the `HELMET_CASES_DIR` and `HELMET_LOCATION` env vars, or pass the location as a CLI argument to `Helmet_detect.py`.
 - The 5 toll-survey videos used for the demo and the recorded case photos are **removed from the repository** (size and privacy: they contain real riders and license plates). Re-run on your own footage.
 - No custom license is included; Darknet/YOLOv3 and OpenCV carry their own licenses.
 
