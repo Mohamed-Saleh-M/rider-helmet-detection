@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Trained model artifacts (large, not committed)
+*.weights
+*.h5
+
+# Input survey videos
+*.mp4
+
+# Recorded case photos (privacy-sensitive surveillance images)
+*.jpg
+*.jpeg
+*.png
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
